@@ -10,7 +10,10 @@ from pydub.silence import split_on_silence
 parser = argparse.ArgumentParser()
 parser.add_argument(
     'cmd',
-    choices=('subtitle',),
+    choices=(
+        'subtitle-video',
+        'subtitle-audio',
+    ),
 )
 
 parser.add_argument(
@@ -199,5 +202,7 @@ def _get_subtitle(file, outdir=None, save_audio=False, lang='en-US'):
     
 if __name__ == '__main__':
     args = parser.parse_args()
-    if args.cmd == 'subtitle':
+    if args.cmd == 'subtitle-video':
         _get_subtitle(file=args.file, outdir=args.outdir, save_audio=args.audio, lang=args.lang)
+    elif args.cmd == 'subtitle-audio':
+        pass
