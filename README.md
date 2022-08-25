@@ -2,17 +2,27 @@
 Subtitler est un programme minimaliste vous permettant de générer des sous-titres pour vos vidéos.
 ## Installation
 1. Pour commencer, obtenez le code via la commande
+
 `git clone git@github.com:ParfaitD9/subtitler.git`
+
 2. Rendez vous dans le dossier subtitler
+
 `cd subtitler`
+
 3. Créez un environnement virtuel pour les paquets nécéssairees
+
 `python -m venv venv`
+
 4. Activez votre environnement virtuel
+
 **Linux**
 `source venv/bin/activate`
+
 **Windows**
 `.\venv\Scripts\activate`
+
 5. Installez les paquets
+
 `pip install -r requirements.txt`
 
 Vous êtes maintenant prêt à sous titrer vos vidéos 👍
