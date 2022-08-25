@@ -3,7 +3,7 @@ Subtitler est un programme minimaliste vous permettant de générer des sous-tit
 ## Installation
 1. Pour commencer, obtenez le code via la commande
 
-`git clone git@github.com:ParfaitD9/subtitler.git`
+`git clone https://github.com/ParfaitD9/subtitler.git`
 
 2. Rendez vous dans le dossier subtitler
 
