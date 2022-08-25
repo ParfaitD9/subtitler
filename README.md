@@ -20,9 +20,13 @@ Vous êtes maintenant prêt à sous titrer vos vidéos 👍
 ## Utilisation
 ### Commandes
 La commande pour sous-titrer une vidéo est aussi simple que:
+
 `python main.py subtitle -f <nom_de_la_video.mp4>`
-Cette commande vous génère un fichier `<nom_de_la_video.srt>` qui contient les sous-titres
-de votre vidéo.
+
+Cette commande vous génère un fichier `<nom_de_la_video.srt>` dans le dossier de la vidéo qui contient les sous-titres de votre vidéo.
+|Long|Description|
+|----|-----------|
+|`subtitle`|Sous titrer une vidéo|
 ## Arguments
 |Long|Court|Description|Défaut|
 |----|-----|-----------|------|
