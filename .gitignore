@@ -3,3 +3,5 @@ __pycache__
 *.pyc
 !files/audio/audio-chunks
 !files/subtitles
+.vscode
+*.wav
