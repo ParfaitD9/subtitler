@@ -44,12 +44,18 @@ class Program:
 class File:
     """To processed file implementation based on moviepy.VideoClip"""
 
-    def __init__(self, filename, is_audio=False):
-        if is_audio:
-            self.audio = AudioFileClip(filename)
-        else:
-            self.audio = VideoFileClip(filename).audio
+    def __init__(self, filename, is_audio=False, lang="en-US"):
+        try:
+            if is_audio:
+                self.audio = AudioFileClip(filename)
+            else:
+                self.audio = VideoFileClip(filename).audio
+        except (OSError,) as e:
+            print("Error reading file provided. Please check its format and retry !")
+            sys.exit(2)
+
         self.path: Path = Path(filename)
+        self.language = lang
 
     def save_audio(self):
         if self.audio is not None:
@@ -100,7 +106,7 @@ class File:
                 with sr.AudioFile(chunk_path) as source:
                     listened = r.record(source)
                     try:
-                        txt: str = r.recognize_google(listened)  # type: ignore
+                        txt: str = r.recognize_google(listened, language=self.language)  # type: ignore
                     except sr.UnknownValueError as e:
                         txt = "Unable to recognize this part"
                         errors = True

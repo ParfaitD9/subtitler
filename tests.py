@@ -5,7 +5,7 @@ from datetime import timedelta
 
 class TestUtils(unittest.TestCase):
     def test_srt_formatting(self):
-        self.assertEqual(
+        self.assertEquals(
             File.as_srt(
                 1,
                 timedelta(seconds=16, milliseconds=312),
