@@ -5,6 +5,7 @@ from datetime import timedelta
 import os
 from pathlib import Path
 import sys
+from typing import Generator
 
 from tqdm import tqdm
 from moviepy.editor import VideoFileClip, AudioFileClip
@@ -44,17 +45,17 @@ class Program:
 class File:
     """To processed file implementation based on moviepy.VideoClip"""
 
-    def __init__(self, filename, is_audio=False, lang="en-US"):
+    def __init__(self, filepath, is_audio=False, lang="en-US", **kwargs):
         try:
             if is_audio:
-                self.audio = AudioFileClip(filename)
+                self.audio = AudioFileClip(filepath)
             else:
-                self.audio = VideoFileClip(filename).audio
+                self.audio = VideoFileClip(filepath).audio
         except (OSError,) as e:
             print("Error reading file provided. Please check its format and retry !")
             sys.exit(2)
 
-        self.path: Path = Path(filename)
+        self.path: Path = Path(filepath)
         self.language = lang
 
     def save_audio(self):
@@ -84,7 +85,7 @@ class File:
 
         return "%02d:%02d:%02d,%03d" % (hours, minutes, seconds, milliseconds)
 
-    def generate_srt(self):
+    def generate_srt(self, save=True) -> str:
         errors = False
         self.save_audio()
         sound: AudioSegment = AudioSegment.from_mp3(self.path.with_suffix(".mp3"))
@@ -96,39 +97,49 @@ class File:
             keep_silence=500,
         )
 
+        parts = list()
         current = 0
-        with open(self.path.with_suffix(".srt"), "w") as f:
-            for i, chunk in enumerate(tqdm(chunks), 1):
-                chunk_path = os.path.join("assets", "chunks", f"chunk-{i}.flac")
-                chunk.export(
-                    chunk_path, format="flac"
-                )  # Use flac format to be more lightweight
-                with sr.AudioFile(chunk_path) as source:
-                    listened = r.record(source)
-                    try:
-                        txt: str = r.recognize_google(listened, language=self.language)  # type: ignore
-                    except sr.UnknownValueError as e:
-                        txt = "Unable to recognize this part"
-                        errors = True
-                    except Exception as e:
-                        print(e, e.args)
-                        errors = True
-                        txt = "Unable to recognize this part"
 
-                content = File.as_srt(
-                    i,
-                    timedelta(seconds=current) + timedelta(milliseconds=100),
-                    timedelta(seconds=current + chunk.duration_seconds),
-                    txt,
-                )
-                f.write(content)
-                os.remove(chunk_path)
-                current += chunk.duration_seconds
+        for i, chunk in enumerate(tqdm(chunks), 1):
+            chunk_path = os.path.join("assets", "chunks", f"chunk-{i}.flac")
+            chunk.export(
+                chunk_path, format="flac"
+            )  # Use flac format to be more lightweight
+            with sr.AudioFile(chunk_path) as source:
+                listened = r.record(source)
+                try:
+                    txt: str = r.recognize_google(
+                        listened, language=self.language
+                    )  # type: ignore
+                except sr.UnknownValueError as e:
+                    txt = "Unable to recognize this part"
+                    errors = True
+                except Exception as e:
+                    print(e, e.args)
+                    errors = True
+                    txt = "Unable to recognize this part"
+
+            content = File.as_srt(
+                i,
+                timedelta(seconds=current) + timedelta(milliseconds=100),
+                timedelta(seconds=current + chunk.duration_seconds),
+                txt,
+            )
+
+            parts.append(content)
+            os.remove(chunk_path)
+            current += chunk.duration_seconds
+
+        txt = "".join(parts)
         if errors:
             print(
                 "Certaines erreurs ont été rencontrer lors de la génération du fichier."
             )
-        print("Fichier de sous titre générer à", self.path.with_suffix(".srt"))
+        if save:
+            with open(self.path.with_suffix(".srt"), "w") as f:
+                f.write(txt)
+            print("Fichier de sous titre générer à", self.path.with_suffix(".srt"))
+        return txt
 
 
 if __name__ == "__main__":
