@@ -47,7 +47,7 @@ class SubtitlerView(QMainWindow):
         self.ui.tableWidget.setHorizontalHeaderLabels(["Name", "Location", "Size"])
         print("State is", self.state)
 
-        self.setWindowIcon(QIcon("assets/logo.svg"))
+        self.setWindowIcon(QIcon("assets/icon.svg"))
         self._thread.start()
 
     @property

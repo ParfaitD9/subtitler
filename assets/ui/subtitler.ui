@@ -28,7 +28,7 @@
               <item>
                <widget class="QLabel" name="label_ann_file">
                 <property name="text">
-                 <string>Selectionnez un fichier pour en extraire les sous-titres</string>
+                 <string>Select a file to extract the subtitles</string>
                 </property>
                </widget>
               </item>
@@ -62,7 +62,7 @@
                <item>
                 <widget class="QLabel" name="label_options_traitement">
                  <property name="text">
-                  <string>Options de traitement</string>
+                  <string>Treatment options</string>
                  </property>
                 </widget>
                </item>
@@ -71,7 +71,7 @@
                  <item>
                   <widget class="QLabel" name="label_select_langue">
                    <property name="text">
-                    <string>Langue</string>
+                    <string>Language</string>
                    </property>
                   </widget>
                  </item>
@@ -150,7 +150,7 @@
              <item>
               <widget class="QLabel" name="label_ann_content">
                <property name="text">
-                <string>Une fois l'extraction terminé, vous pourrez voir le texte ici.</string>
+                <string>When the extraction is complete, you will see subtitles here</string>
                </property>
               </widget>
              </item>
@@ -174,7 +174,7 @@
            <item>
             <widget class="QLabel" name="label_progress">
              <property name="text">
-              <string>La progression de l'extraction s'affichera ici</string>
+              <string>Extraction progress will be displayed here</string>
              </property>
             </widget>
            </item>
@@ -195,14 +195,14 @@
         <item>
          <widget class="QPushButton" name="button_new">
           <property name="text">
-           <string>Générer des sous-titres</string>
+           <string>Generate subtitles</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="button_save">
           <property name="text">
-           <string>Sauvegarder ces sous-titres</string>
+           <string>Save these subtitles</string>
           </property>
          </widget>
         </item>
