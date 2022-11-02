@@ -6,3 +6,8 @@ __pycache__
 *.wav
 *.sh
 .pylintrc
+*.egg.*
+dist
+build
+*.spec
+tree.txt
