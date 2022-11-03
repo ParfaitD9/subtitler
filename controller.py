@@ -8,7 +8,10 @@ import sys
 from typing import Generator
 
 from tqdm import tqdm
-from moviepy.editor import VideoFileClip, AudioFileClip
+
+# from moviepy.editor import VideoFileClip, AudioFileClip
+from moviepy.video.io.VideoFileClip import VideoFileClip
+from moviepy.audio.io.AudioFileClip import AudioFileClip
 import speech_recognition as sr
 from pydub.audio_segment import AudioSegment
 from pydub.silence import split_on_silence

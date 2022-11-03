@@ -132,10 +132,16 @@ class SubtitlerView(QMainWindow):
         return super().closeEvent(a0)
 
     def updateFileDialog(self):
+        default_dir = (
+            "/home/%s" % os.getenv("USER")
+            if platform.system() == "Linux"
+            else "C:\\Users"
+        )
+        current_dir = self.state.kwargs.get("current_dir")
         fname = QFileDialog.getOpenFileName(
             self,
-            "Open file",
-            "/home/parfaitd/Videos/Rust/Holochain",
+            "Update file",
+            current_dir if current_dir else default_dir,
             "Sous-titres (*.srt)",
         )
 
