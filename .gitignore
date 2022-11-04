@@ -11,3 +11,4 @@ dist
 build
 *.spec
 tree.txt
+*.flac

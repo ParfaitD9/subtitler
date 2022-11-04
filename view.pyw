@@ -27,17 +27,13 @@ class SubtitlerView(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.ui.actionOpen_multiple_files.triggered.connect(
-            lambda: self.openFileDialog(True)
-        )
-
         self._thread = QThread(self)
         self.worker = Worker(app=self)
         self.worker.moveToThread(self._thread)
         self.worker.done.connect(self.load_content_to_box)
 
         self.__state = State.from_cfg(Path("assets/user.cfg"))
-        self.ui.actionOpen_a_file.triggered.connect(lambda: self.openFileDialog(False))
+        self.ui.actionOpen_a_file.triggered.connect(self.openFileDialog)
         self.ui.actionUpdate_subtitle.triggered.connect(self.updateFileDialog)
         self.ui.actionLatest_state.triggered.connect(self.reload_state)
         self.ui.button_new.clicked.connect(self.worker.process)
@@ -48,6 +44,7 @@ class SubtitlerView(QMainWindow):
         print("State is", self.state)
 
         self.setWindowIcon(QIcon("assets/icon.svg"))
+        self.setWindowTitle("Subtitler")
         self._thread.start()
 
     @property
@@ -82,7 +79,7 @@ class SubtitlerView(QMainWindow):
                 self.ui.text_content.setText(f.read())
         self.__state = value
 
-    def openFileDialog(self, multiples=True) -> list[Path]:
+    def openFileDialog(self) -> list[Path]:
         default_dir = (
             "/home/%s" % os.getenv("USER")
             if platform.system() == "Linux"
@@ -90,31 +87,20 @@ class SubtitlerView(QMainWindow):
         )
         current_dir = self.state.kwargs.get("current_dir")
         print("State is", self.__state)
-        if multiples:
-            fname = QFileDialog.getOpenFileNames(
-                self,
-                "Open file",
-                current_dir if current_dir else default_dir,
-                "Videos (*.mp4)",
-            )
 
-        else:
-            fname = QFileDialog.getOpenFileName(
-                self,
-                "Open file",
-                current_dir if current_dir else default_dir,
-                "Videos (*.mp4)",
-            )
+        fname = QFileDialog.getOpenFileName(
+            self,
+            "Open file",
+            current_dir if current_dir else default_dir,
+            "Videos (*.mp4)",
+        )
 
         if fname[0]:
-            files = (
-                [Path(p) for p in fname[0]]
-                if multiples
-                else [
-                    Path(fname[0]),  # type: ignore
-                ]
-            )
+            files = [
+                Path(fname[0]),
+            ]
             self.show_files(files)
+            self.ui.button_new.setEnabled(True)
             self.ui.text_content.clear()
             self.ui.label_ann_file.setText(
                 "Subtitles will be extracted from files below"
@@ -159,6 +145,7 @@ class SubtitlerView(QMainWindow):
             with open(file) as f:
                 data = f.read()
                 self.ui.text_content.setText(data)
+                self.ui.button_save.setEnabled(True)
 
     def load_languages(self):
         langs = [
@@ -219,6 +206,7 @@ class SubtitlerView(QMainWindow):
     def load_content_to_box(self, content: list[str]):
         txt, name = content
         self.ui.text_content.setText(txt)
+        self.ui.button_save.setEnabled(True)
         self.ui.label_ann_content.setText(f"Subtitles extrated from {name} are below :")
         self.ui.button_new.setDisabled(False)
 
@@ -254,6 +242,7 @@ class Worker(QObject):
         print("State is", data)
         self._parent.ui.label_progress.setText("Extrating ...")
         self._parent.ui.progressBar.setValue(52)
+        print("debug")
         file = File(**data)
         content = file.generate_srt(save=False)
         time.sleep(5)
