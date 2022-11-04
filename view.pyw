@@ -43,7 +43,7 @@ class SubtitlerView(QMainWindow):
         self.ui.tableWidget.setHorizontalHeaderLabels(["Name", "Location", "Size"])
         print("State is", self.state)
 
-        self.setWindowIcon(QIcon("assets/icon.svg"))
+        self.setWindowIcon(QIcon("assets/icon.png"))
         self.setWindowTitle("Subtitler")
         self._thread.start()
 
@@ -216,7 +216,7 @@ class SubtitlerView(QMainWindow):
 
         save_name, _ = QFileDialog.getSaveFileName(
             self,
-            "QFileDialog.getSaveFilename()",
+            "Save subtitles",
             path.with_suffix(".srt").__str__(),
             "Subtitles (*.srt)",
         )
@@ -239,10 +239,8 @@ class Worker(QObject):
         print("Extraction started ...")
 
         data = self._parent.get_current_state()  # type: ignore
-        print("State is", data)
         self._parent.ui.label_progress.setText("Extrating ...")
         self._parent.ui.progressBar.setValue(52)
-        print("debug")
         file = File(**data)
         content = file.generate_srt(save=False)
         time.sleep(5)

@@ -1,6 +1,6 @@
 # SUBTITLER
 It is an interface written with PyQt6 that allows you to:
-![Subtitler logo](/assets/icon.svg)
+![Subtitler logo](/assets/icon.png)
 - extract subtitles from your audio and video files
 - modify your subtitle files and
 - store them in different formats.
